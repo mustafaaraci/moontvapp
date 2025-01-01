@@ -55,7 +55,7 @@ const HomeScreen = () => {
 
     return (
       // burası kategöriler için sağ taraftan padding yaptık
-      <View key={genre} style={[styles.section, { paddingRight: 5 }]}>
+      <View key={genre} style={[styles.section]}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           {genre}
         </Text>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   section: {
     marginTop: 4,
     marginBottom: 10,
-    // paddingRight: 5,
+    // paddingRight: 5,  opsiyonel yapılabilir.
   },
   sectionTitle: {
     fontSize: 18,
