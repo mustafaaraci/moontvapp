@@ -5,6 +5,8 @@ import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Nunito_700Bold } from "@expo-google-fonts/nunito";
+import { useFonts } from "expo-font";
 
 const CustomFeatherIcon = ({ state, descriptors, navigation }) => {
   const { colors, isDarkTheme } = useTheme();
@@ -20,15 +22,33 @@ const CustomFeatherIcon = ({ state, descriptors, navigation }) => {
       friction: 3,
       useNativeDriver: true,
     }).start();
-  }, [state.index]);
+  }, [state.index, fonts]);
+
+  // Fontları yükle
+  const [fonts] = useFonts({
+    Nunito_700Bold,
+  });
+
+  // Fontlar yüklenmemişse, boş bir ekran göster
+  if (!fonts) {
+    return <Text>Fontlar Yükleniyor...</Text>;
+  }
 
   return (
     <View
       style={[
         styles.tabBar,
         isDarkTheme
-          ? { borderTopWidth: 0.8, borderTopColor: "#444444" }
-          : { elevation: 0.8 },
+          ? {
+              borderTopWidth: 0.8,
+              borderTopColor: colors.border,
+              backgroundColor: colors.background,
+            }
+          : {
+              backgroundColor: colors.background,
+              borderTopWidth: 1,
+              borderTopColor: colors.border,
+            },
       ]}
     >
       {state.routes.map((route, index) => {

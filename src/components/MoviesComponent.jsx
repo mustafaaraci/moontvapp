@@ -14,7 +14,7 @@ import { fetchMovies } from "../redux/MoviesSlice";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../context/ThemeContext";
 
-const MoviesComponent = ({ goToDetails }) => {
+const MoviesComponent = () => {
   const { movies, status, error } = useSelector((state) => state.movies);
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -24,10 +24,13 @@ const MoviesComponent = ({ goToDetails }) => {
     dispatch(fetchMovies());
   }, [dispatch, navigation]);
 
+  const goToDetails = (item) => {
+    navigation.navigate("Details", { movieId: item.id });
+  };
+
   const renderItem = ({ item }) => (
     <Pressable
       style={[styles.card, { backgroundColor: colors.card }]}
-      // onPress={() => navigation.navigate("Details", { movieId: item.id })}
       onPress={() => goToDetails(item)}
     >
       <Image source={{ uri: item.poster_path }} style={styles.image} />

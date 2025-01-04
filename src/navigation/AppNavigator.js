@@ -14,13 +14,12 @@ import ComingSoonScreen from "../screens/ComingSoonScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const HomeStackNavigator = () => {
-  const { colors } = useTheme();
-  //burayı düzenliyoruz geributonu nasıl olacak ona bakıyoruz devam ediyoruz
+const AppNavigator = () => {
+  const { colors, isDarkTheme } = useTheme();
   return (
     <Stack.Navigator
       screenOptions={({ navigation }) => ({
-        headerShown: true,
+        // headerShown: false,
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -40,18 +39,18 @@ const HomeStackNavigator = () => {
         headerStyle: {
           backgroundColor: colors.headerBackground, // Tema rengine göre header arka planı
         },
-        // headerTintColor: colors.text, // Header metni rengi opsiyonel
+        //headerTintColor: colors.text, // Header metni rengi opsiyonel
       })}
     >
       <Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+        name="StackHome"
+        component={MainTabNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Details"
         component={DetailsScreen}
-        // options={{ title: "Detay" }}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );
@@ -61,30 +60,29 @@ const MainTabNavigator = () => {
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomFeatherIcon {...props} />} // Feather tabBar
-      screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
         name="Home"
-        component={HomeStackNavigator}
-        options={{ tabBarLabel: "Ana Sayfa" }}
+        component={HomeScreen}
+        options={{ tabBarLabel: "Ana Sayfa", headerShown: false }}
       />
       <Tab.Screen
         name="Movies"
         component={MovieScreen}
-        options={{ tabBarLabel: "Filmler" }}
+        options={{ tabBarLabel: "Filmler", headerShown: false }}
       />
       <Tab.Screen
         name="ComingSoon"
         component={ComingSoonScreen}
-        options={{ tabBarLabel: "Yakında" }}
+        options={{ tabBarLabel: "Yakında", headerShown: false }}
       />
       <Tab.Screen
         name="Login"
         component={LoginScreen}
-        options={{ tabBarLabel: "Giriş Yap" }}
+        options={{ tabBarLabel: "Giriş Yap", headerShown: false }}
       />
     </Tab.Navigator>
   );
 };
 
-export default MainTabNavigator;
+export default AppNavigator;
