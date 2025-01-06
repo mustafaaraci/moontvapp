@@ -14,7 +14,6 @@ moonApp, kullanıcıların film içeriklerini keşfetmelerini ve yönetmelerini 
 - Favoriler ekranı (yapım aşamasında)
 - Sayfalama-Pagination (yapım aşamasında)
 - Kullanıcı Ekranı(yapım aşamasında )
-- Yakında Ekranı (yapım aşamasında)
 
 ## Kullanılan Teknolojiler
 
@@ -26,6 +25,7 @@ moonApp, kullanıcıların film içeriklerini keşfetmelerini ve yönetmelerini 
 - **React Native Reanimated**: Animasyonlar için kullanılır
 - **React Native Safe Area Context**: Güvenli alanlar için kullanılır
 - **Expo Vector İcons**:Expo uygulamalarında kullanmak için tasarlanmış bir ikon kütüphanesidir.
+- **React-native-toast-notifications**:Bildirimler için oluşturulmuş kütüphanedir.
 
 ## Kurulum ve çalıştırma
 

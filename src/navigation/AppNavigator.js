@@ -9,7 +9,7 @@ import DetailsScreen from "../screens/DetailsScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { useTheme } from "../context/ThemeContext";
 import CustomFeatherIcon from "../components/CustomFeather";
-import ComingSoonScreen from "../screens/ComingSoonScreen";
+import FavoritesScreen from "../screens/FavoritesScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -71,11 +71,13 @@ const MainTabNavigator = () => {
         component={MovieScreen}
         options={{ tabBarLabel: "Filmler", headerShown: false }}
       />
+
       <Tab.Screen
-        name="ComingSoon"
-        component={ComingSoonScreen}
-        options={{ tabBarLabel: "Yakında", headerShown: false }}
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{ tabBarLabel: "Favoriler", headerShown: false }}
       />
+
       <Tab.Screen
         name="Login"
         component={LoginScreen}

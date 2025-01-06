@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   Dimensions,
   Image,
@@ -12,24 +11,29 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../context/ThemeContext";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import MoviesSlider from "../components/MoviesSlider";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovies } from "../redux/MoviesSlice";
 import CustomHeader from "../components/CustomHeader";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { addFavorite, removeFavorite } from "../redux/favoritesSlice";
+import { useToast } from "react-native-toast-notifications";
 
-//ekran oranımızı alıyoruz
+// Ekran oranımızı alıyoruz
 export const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const { colors, toggleTheme, isDarkTheme } = useTheme();
+  const { colors } = useTheme();
   const { movies } = useSelector((state) => state.movies);
+  const { favorites } = useSelector((state) => state.favorites);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   useEffect(() => {
     dispatch(fetchMovies());
-  }, [dispatch, navigation]);
+  }, [dispatch]);
 
   const genres = ["Yeni Eklenenler", "Popüler"];
 
@@ -44,9 +48,29 @@ const HomeScreen = () => {
         return topMovies; // Popüler filmleri döndür
       case "Yeni Eklenenler":
         return movies;
-
       default:
         return [];
+    }
+  };
+
+  // Favori durumu
+  const toggleFavorite = (movie) => {
+    if (favorites.some((fav) => fav.id === movie.id)) {
+      dispatch(removeFavorite(movie)); // Favoriden çıkar
+      toast.show(`${movie.original_title} favorilerden çıkarıldı!`, {
+        type: "success",
+        duration: 3000,
+        placement: "top",
+        animationType: "slide-in",
+      });
+    } else {
+      dispatch(addFavorite(movie)); // Favorilere ekle
+      toast.show(`${movie.original_title} favorilere eklendi!`, {
+        type: "success",
+        duration: 3000,
+        placement: "top",
+        animationType: "slide-in",
+      });
     }
   };
 
@@ -54,7 +78,6 @@ const HomeScreen = () => {
     const genreMovies = categorizeMovies(genre);
 
     return (
-      // burası kategöriler için sağ taraftan padding yaptık
       <View key={genre} style={[styles.section]}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           {genre}
@@ -64,51 +87,58 @@ const HomeScreen = () => {
           horizontal
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Pressable
-              style={[styles.card, { backgroundColor: colors.card }]}
-              onPress={() =>
-                navigation.navigate("Details", { movieId: item.id })
-              }
-            >
-              <Image source={{ uri: item.poster_path }} style={styles.image} />
-              <View
-                style={[
-                  styles.overlay,
-                  isDarkTheme ? { opacity: 0.9 } : { opacity: 0.9 },
-                ]}
+            <View style={[styles.card, { backgroundColor: colors.card }]}>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("Details", { movieId: item.id })
+                }
               >
-                <Text
-                  style={[styles.cardTitle, { color: "white" }]}
-                  numberOfLines={2} // Başlık çok uzunsa 2 satırda kesilecek
+                <Image
+                  source={{ uri: item.poster_path }}
+                  style={styles.image}
+                />
+                <View style={styles.overlay}>
+                  <Text
+                    style={[styles.cardTitle, { color: "white" }]}
+                    numberOfLines={2} // Başlık çok uzunsa 2 satırda kesilecek
+                  >
+                    {item.original_title}
+                  </Text>
+                </View>
+              </Pressable>
+
+              {/* Sol üstte IMDb ve sağ üstte kalp ikonu */}
+              <View style={styles.ratingContainer}>
+                <View style={styles.imdbContainer}>
+                  <MaterialIcons name="star" size={12} color="#fbbf24" />
+                  <Text style={[styles.ratingText, { color: "white" }]}>
+                    IMDb
+                  </Text>
+                  <Text style={[styles.ratingText, { color: "white" }]}>
+                    {item.vote_average}
+                  </Text>
+                </View>
+                <Pressable
+                  style={styles.favoriteButtonContainer}
+                  onPress={() => toggleFavorite(item)} // Favori değerini değiştir
                 >
-                  {item.original_title}
-                </Text>
+                  <TouchableOpacity>
+                    <Entypo
+                      name="heart"
+                      size={28}
+                      style={[
+                        styles.favoritesIcon,
+                        {
+                          color: favorites.some((fav) => fav.id === item.id)
+                            ? "#FFC000"
+                            : "rgb(255, 255, 255)",
+                        },
+                      ]}
+                    />
+                  </TouchableOpacity>
+                </Pressable>
               </View>
-              <View
-                style={[
-                  styles.ratingContainer,
-                  isDarkTheme ? { opacity: 0.8 } : { opacity: 0.9 },
-                ]}
-              >
-                <MaterialIcons name="star" size={12} color="#fbbf24" />
-                <Text
-                  style={[
-                    styles.ratingText,
-                    isDarkTheme ? { color: colors.text } : { color: "white" },
-                  ]}
-                >
-                  IMDb
-                </Text>
-                <Text
-                  style={[
-                    styles.ratingText,
-                    isDarkTheme ? { color: colors.text } : { color: "white" },
-                  ]}
-                >
-                  {item.vote_average}
-                </Text>
-              </View>
-            </Pressable>
+            </View>
           )}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -118,7 +148,6 @@ const HomeScreen = () => {
   };
 
   const renderMainSection = () => (
-    // burası genel kontainer
     <View>
       <View style={[styles.section]}>
         <MoviesSlider />
@@ -133,16 +162,15 @@ const HomeScreen = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* üst başlık kısımımız */}
       <CustomHeader />
-      {/* üst başlık kısmımımz */}
 
       <FlatList
         ListHeaderComponent={renderMainSection}
         data={[]} // Boş veri, çünkü sadece başlık ve MoviesComponent göstereceğiz
         renderItem={null} // Veri olmadığı için renderItem yok
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.toString()} // Benzersiz anahtar
         scrollEnabled={true}
+        extraData={favorites} // Favori durumunu izlemek için
       />
     </SafeAreaView>
   );
@@ -152,31 +180,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    //bizim custom eklediğimiz font
-  },
-  iconContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-  },
-  iconButton: {
-    padding: 0,
-  },
   section: {
     marginTop: 4,
     marginBottom: 10,
-    // paddingRight: 5,  opsiyonel yapılabilir.
   },
   sectionTitle: {
     fontSize: 18,
@@ -204,8 +210,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.73)",
     padding: 8,
     alignItems: "center",
-    borderTopLeftRadius: 10, // Sol üst köşe yuvarlama
-    borderTopRightRadius: 10, // Sağ üst köşe yuvarlama
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   cardTitle: {
     fontSize: 14,
@@ -217,18 +223,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     top: 5,
+    left: 5,
     right: 5,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  imdbContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.73)",
     paddingVertical: 5,
     paddingHorizontal: 8,
     borderRadius: 12,
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.73)",
   },
   ratingText: {
     fontSize: 10,
     fontWeight: "bold",
     paddingLeft: 2,
+  },
+  favoriteButtonContainer: {
+    backgroundColor: "rgba(0, 0, 0, 0.73)",
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 0,
+    padding: 6,
+    left: 10,
+    bottom: 10,
+  },
+
+  favoritesIcon: {
+    padding: 2,
   },
 });
 

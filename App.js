@@ -6,13 +6,16 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/store";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
         <ThemeProvider>
-          <AppContent />
+          <ToastProvider>
+            <AppContent />
+          </ToastProvider>
         </ThemeProvider>
       </Provider>
     </SafeAreaProvider>

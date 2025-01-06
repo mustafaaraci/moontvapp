@@ -94,15 +94,15 @@ const CustomFeatherIcon = ({ state, descriptors, navigation }) => {
         if (route.name === "Home") {
           iconName = "home";
           IconComponent = Entypo;
-        } else if (route.name === "ComingSoon") {
-          iconName = "movie";
-          IconComponent = MaterialIcons;
-        } else if (route.name === "Login") {
-          iconName = "user";
-          IconComponent = FontAwesome;
         } else if (route.name === "Movies") {
           iconName = "filmstrip-box";
           IconComponent = MaterialCommunityIcons;
+        } else if (route.name === "Favorites") {
+          iconName = "heart";
+          IconComponent = Entypo;
+        } else if (route.name === "Login") {
+          iconName = "user";
+          IconComponent = FontAwesome;
         }
 
         return (
