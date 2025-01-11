@@ -11,7 +11,7 @@ moonApp, kullanıcıların film içeriklerini keşfetmelerini ve yönetmelerini 
 - Yeni eklenen Filmler
 - Filtreleme işlemleri(yapım aşamasında)
 - Detay ekranı
-- Favoriler ekranı (yapım aşamasında)
+- Favoriler ekranı
 - Sayfalama-Pagination (yapım aşamasında)
 - Kullanıcı Ekranı(yapım aşamasında )
 
