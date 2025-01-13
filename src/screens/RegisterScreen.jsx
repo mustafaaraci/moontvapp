@@ -10,22 +10,38 @@ import {
 import React from "react";
 import { useTheme } from "../context/ThemeContext";
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
   const { colors, isDarkTheme } = useTheme();
 
-  const handleLogin = () => {
-    // Giriş işlemleri burada yapılacak
-    Alert.alert("Giriş Yapıldı", "Giriş başarılı!");
+  const handleRegister = ({ navigation }) => {
+    // Kayıt işlemleri burada yapılacak
+    Alert.alert("Kayıt Olundu", "Kayıt başarılı!");
   };
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Giriş Yap</Text>
-
+      <Text style={[styles.title, { color: colors.text }]}>Kayıt Ol</Text>
       <TextInput
         style={[
           styles.input,
-          styles.inputEmail,
+          { borderColor: colors.border, color: colors.text },
+        ]}
+        placeholder="Ad"
+        placeholderTextColor={colors.text}
+        selectionColor={isDarkTheme ? colors.text : "#4a044e"}
+      />
+      <TextInput
+        style={[
+          styles.input,
+          { borderColor: colors.border, color: colors.text },
+        ]}
+        placeholder="Soyad"
+        placeholderTextColor={colors.text}
+        selectionColor={isDarkTheme ? colors.text : "#4a044e"}
+      />
+      <TextInput
+        style={[
+          styles.input,
           { borderColor: colors.border, color: colors.text },
         ]}
         placeholder="E-posta"
@@ -35,10 +51,19 @@ const LoginScreen = ({ navigation }) => {
       <TextInput
         style={[
           styles.input,
-          styles.inputPassword,
           { borderColor: colors.border, color: colors.text },
         ]}
         placeholder="Şifre"
+        placeholderTextColor={colors.text}
+        selectionColor={isDarkTheme ? colors.text : "#4a044e"}
+        secureTextEntry
+      />
+      <TextInput
+        style={[
+          styles.input,
+          { borderColor: colors.border, color: colors.text },
+        ]}
+        placeholder="Şifre Onayla"
         placeholderTextColor={colors.text}
         selectionColor={isDarkTheme ? colors.text : "#4a044e"}
         secureTextEntry
@@ -49,7 +74,7 @@ const LoginScreen = ({ navigation }) => {
           styles.button,
           { backgroundColor: isDarkTheme ? "#4a044e" : "#4a044e" },
         ]}
-        onPress={handleLogin}
+        onPress={handleRegister}
       >
         <Text
           style={[
@@ -57,21 +82,14 @@ const LoginScreen = ({ navigation }) => {
             isDarkTheme ? { color: colors.text } : { color: "white" },
           ]}
         >
-          Giriş Yap
+          Kaydol
         </Text>
       </TouchableOpacity>
-
-      <Pressable onPress={() => navigation.navigate("Register")}>
-        <Text style={[styles.registerText, { color: colors.text }]}>
-          Henüz bir hesabınız yok mu?
-          <Text style={styles.buttonRegister}> Kayıt Ol</Text>
-        </Text>
-      </Pressable>
     </View>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -92,7 +110,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 20,
   },
-
   button: {
     height: 50,
     borderRadius: 10,

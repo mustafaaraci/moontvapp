@@ -15,6 +15,11 @@ const CustomFeatherIcon = ({ state, descriptors, navigation }) => {
   //  her bir sekme için animasyon değerlerini saklamak için useRef kullanıyoruz
   const scales = useRef(state.routes.map(() => new Animated.Value(1))).current;
 
+  // Fontları yükle
+  const [fonts] = useFonts({
+    Nunito_700Bold,
+  });
+
   // İlk yüklendiğinde animasyonu başlatmak için useEffect kullanıyoruz
   useEffect(() => {
     Animated.spring(scales[state.index], {
@@ -23,11 +28,6 @@ const CustomFeatherIcon = ({ state, descriptors, navigation }) => {
       useNativeDriver: true,
     }).start();
   }, [state.index, fonts]);
-
-  // Fontları yükle
-  const [fonts] = useFonts({
-    Nunito_700Bold,
-  });
 
   // Fontlar yüklenmemişse, boş bir ekran göster
   if (!fonts) {

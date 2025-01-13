@@ -10,6 +10,7 @@ import LoginScreen from "../screens/LoginScreen";
 import { useTheme } from "../context/ThemeContext";
 import CustomFeatherIcon from "../components/CustomFeather";
 import FavoritesScreen from "../screens/FavoritesScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -52,6 +53,8 @@ const AppNavigator = () => {
         component={DetailsScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
 };
